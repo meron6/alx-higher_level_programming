@@ -1,33 +1,63 @@
-cat tests/0-add_integer.txt
-"""
-Test cases for the add_integer function.
+#0-add_integer.txt
+===============================
+ How to 0-add_integer.py
+===============================
 
-"""
+This library is very simple, since it only has one function called
+``add_integer()``.
 
-# Test Case 1
->>> add_integer(1, 2)
-3
+Numbers
+=======
 
-# Test Case 2
->>> add_integer(100, -2)
-98
+``add_integer()`` returns the addition of its arguments.  For numbers,
+that value is equivalent to using the ``+`` operator.
 
-# Test Case 3
->>> add_integer(2)
-100
+::
+    >>> add_integer = __import__("0-add_integer").add_integer
+    >>> add_integer(2, 3)
+    5
 
-# Test Case 4
->>> add_integer(100.3, -2)
-98
+It also works with floating-point values and reverts it to int.
 
-# Test Case 5
->>> add_integer(4, "School")
+::
+
+    >>> add_integer(2.0, 3.0)
+    5
+
+a has to be something or an exception will be thrown.
+if b is not specified it will default to 98
+
+::
+    >>> add_integer(0)
+    98
+    >>> add_integer(2.0,)
+    100
+    >>> add_integer(-5.5,100.3)
+    95
+
+Non-Numbers
+===========
+
+Non-numbers should throw TypeError Exceptions
+
+::
+
+    >>> add_integer('a', 3)
+    Traceback (most recent call last):
+    TypeError: a must be an integer
+
+    >>> add_integer(2,['A', 'B', 'C'])
+    Traceback (most recent call last):
+    TypeError: b must be an integer
+
+    >>> add_integer({'a':1},)
+    Traceback (most recent call last):
+    TypeError: a must be an integer
+
+>>> add_integer(float('inf'))
 Traceback (most recent call last):
-    ...
-TypeError: b must be an integer
+OverflowError: cannot convert float infinity to integer
 
-# Test Case 6
->>> add_integer(None)
+>>> add_integer(float('NaN'))
 Traceback (most recent call last):
-    ...
-TypeError: a must be an integer
+ValueError: cannot convert float NaN to integer
