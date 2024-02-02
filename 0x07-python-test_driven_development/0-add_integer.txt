@@ -1,0 +1,33 @@
+cat tests/0-add_integer.txt
+"""
+Test cases for the add_integer function.
+
+"""
+
+# Test Case 1
+>>> add_integer(1, 2)
+3
+
+# Test Case 2
+>>> add_integer(100, -2)
+98
+
+# Test Case 3
+>>> add_integer(2)
+100
+
+# Test Case 4
+>>> add_integer(100.3, -2)
+98
+
+# Test Case 5
+>>> add_integer(4, "School")
+Traceback (most recent call last):
+    ...
+TypeError: b must be an integer
+
+# Test Case 6
+>>> add_integer(None)
+Traceback (most recent call last):
+    ...
+TypeError: a must be an integer
