@@ -1,4 +1,5 @@
 #!/usr/bin/node
+// change property of object
 const myObject = {
   type: 'object',
   value: 12

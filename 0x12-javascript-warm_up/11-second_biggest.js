@@ -1,10 +1,18 @@
 #!/usr/bin/node
-const listArgs = process.argv;
-if (listArgs.length <= 3) {
-  console.log(0);
-} else {
-  listArgs.sort(function (a, b) {
+// returns second biggest number
+function sortNumbers (n) {
+  const myArr = process.argv;
+  myArr.shift();
+  myArr.shift();
+
+  const ordered = myArr.sort(function (a, b) {
     return a - b;
   });
-  console.log(listArgs[listArgs.length - 2]);
+
+  return parseInt(ordered[ordered.length - 2]);
+}
+if (process.argv[3]) {
+  console.log(sortNumbers(process.argv));
+} else {
+  console.log(0);
 }

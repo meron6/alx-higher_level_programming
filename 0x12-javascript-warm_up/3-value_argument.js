@@ -1,4 +1,5 @@
 #!/usr/bin/node
+// prints a message depending on arguments passed
 if (process.argv[2]) {
   console.log(process.argv[2]);
 } else {
