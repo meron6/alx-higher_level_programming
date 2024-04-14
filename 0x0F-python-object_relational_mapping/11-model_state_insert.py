@@ -6,6 +6,11 @@ from sqlalchemy.orm import sessionmaker
 from model_state import State
 
 if __name__ == "__main__":
+    # Check for correct usage
+    if len(sys.argv) != 4:
+        print("Usage: {} <username> <password> <database>".format(sys.argv[0]))
+        sys.exit(1)
+
     # Create the SQLAlchemy engine using the provided MySQL credentials
     engine = create_engine("mysql+mysqldb://{}:{}@localhost/{}"
                            .format(sys.argv[1], sys.argv[2], sys.argv[3]),
@@ -24,4 +29,4 @@ if __name__ == "__main__":
     # Commit the session to persist the changes
     session.commit()
     # Print the ID of the newly added state
-    print(louisiana.id
+    print(louisiana.id)

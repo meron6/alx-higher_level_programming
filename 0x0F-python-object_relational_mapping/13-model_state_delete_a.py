@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-"""Module that deletes states containing the letter\
-        "a" from a MySQL database using SQLAlchemy."""
+"""Module that deletes states containing the letter "a" from a MySQL database using SQLAlchemy."""
 import sys
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -14,13 +13,13 @@ if __name__ == "__main__":
 
     # Create a session factory
     Session = sessionmaker(bind=engine)
+
     # Create a session object
     session = Session()
-    # Retrieve all states from the database
-    for state in session.query(State):
-        # Check if the state's name contains the letter "a"
-        if "a" in state.name:
-            # Delete the state from the session
-            session.delete(state)
+
+    # Retrieve and delete states containing the letter "a" directly in the database query
+    for state in session.query(State).filter(State.name.like("%a%")):
+        session.delete(state)
+
     # Commit the session to persist the changes
     session.commit()
