@@ -1,39 +1,40 @@
 #!/usr/bin/python3
-"""
-creates a city with sqlalchemy relationships
-"""
+"""Script that creates the State “California” with the City “San Francisco”
+   from the database hbtn_0e_100_usa"""
 
-from relationship_state import Base, State
-from relationship_city import City
+import sys
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import sys
-
+from relationship_state import Base, State
+from relationship_city import City
 
 if __name__ == "__main__":
-    if len(sys.argv) == 4:
-        try:
-            engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
-                                   .format(sys.argv[1], sys.argv[2],
-                                           sys.argv[3]), pool_pre_ping=True)
+    # Create the SQLAlchemy engine using the provided MySQL credentials
+    engine = create_engine("mysql+mysqldb://{}:{}@localhost/{}"
+                           .format(sys.argv[1], sys.argv[2], sys.argv[3]),
+                           pool_pre_ping=True)
 
-            Base.metadata.create_all(engine)
+    # Create all tables in the engine
+    Base.metadata.create_all(engine)
 
-            Session = sessionmaker(bind=engine)
+    # Create a session factory
+    Session = sessionmaker(bind=engine)
 
-            session = Session()
+    # Create a session object
+    session = Session()
 
-            california = State("California")
-            sanfrancisco = City("San Francisco")
-            california.cities.append(sanfrancisco)
+    # Create California state
+    california = State(name="California")
+    # Create San Francisco city
+    san_francisco = City(name="San Francisco", state=california)
+    # Add the city to the state's cities
+    california.cities.append(san_francisco)
 
-            session.add(california)
-            session.add(sanfrancisco)
+    # Add the state to the session
+    session.add(california)
 
-            session.commit()
-        except Exception as e:
-            raise
-            print("something wrong about the query")
+    # Commit the session to persist the changes
+    session.commit()
 
-        finally:
-            session.close()
+    # Close the session
+    session.close()
