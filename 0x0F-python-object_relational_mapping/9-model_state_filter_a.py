@@ -1,30 +1,25 @@
 #!/usr/bin/python3
-"""
-list all states with the letter a in their names
-"""
-
-from model_state import Base, State
-from sqlalchemy import create_engine, asc
-from sqlalchemy.orm import sessionmaker
+"""Module that retrieves and prints the states with\
+        letter a from a MySQL database using SQLAlchemy."""
 import sys
-
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from model_state import State
 
 if __name__ == "__main__":
-    if len(sys.argv) == 4:
-        try:
-            engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
-                                   .format(sys.argv[1], sys.argv[2],
-                                           sys.argv[3]), pool_pre_ping=True)
-            Session = sessionmaker(bind=engine)
+    # Create the SQLAlchemy engine using the provided MySQL credentials
+    engine = create_engine("mysql+mysqldb://{}:{}@localhost/{}"
+                           .format(sys.argv[1], sys.argv[2], sys.argv[3]),
+                           pool_pre_ping=True)
 
-            session = Session()
+    # Create a session factory
+    Session = sessionmaker(bind=engine)
 
-            astates = session.query(State) \
-                             .filter(State.name.ilike('%a%')) \
-                             .order_by(asc(State.id)) \
-                             .all()
+    # Create a session object
+    session = Session()
 
-            for state in astates:
-                print("{}: {}".format(state.id, state.name))
-        except:
-            print("something wrong with the query")
+    # Retrieve the states with letter 'a' from the
+    # database and print its ID and name
+    for state in session.query(State).order_by(State.id):
+        if "a" in state.name:
+            print("{}: {}".format(state.id, state.name))

@@ -1,35 +1,27 @@
 #!/usr/bin/python3
+"""Module that retrieves and prints a list of cities with their\
+        associated states from a MySQL database using SQLAlchemy.
 """
-fecth all cities with their state
-"""
-from model_state import Base, State
-from model_city import City
-from sqlalchemy import create_engine, asc
-from sqlalchemy.orm import sessionmaker
 import sys
-
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from model_state import State
+from model_city import City
 
 if __name__ == "__main__":
-    if len(sys.argv) == 4:
-        try:
-            engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
-                                   .format(sys.argv[1], sys.argv[2],
-                                           sys.argv[3]), pool_pre_ping=True)
-
-            Session = sessionmaker(bind=engine)
-            session = Session()
-
-            cities = session.query(City.name.label("city_name"),
-                                   City.id.label("city_id"),
-                                   State.name.label("state_name")) \
-                            .join(State, City.state_id == State.id) \
-                            .order_by(asc(City.id)) \
-                            .all()
-
-            for city in cities:
-                print("{}: ({}) {}".format(city.state_name,
-                                           city.city_id,
-                                           city.city_name))
-
-        except:
-            print("something wrong with the query")
+    # Create the SQLAlchemy engine using the provided MySQL credentials
+    engine = create_engine("mysql+mysqldb://{}:{}@localhost/{}"
+                           .format(sys.argv[1], sys.argv[2], sys.argv[3]),
+                           pool_pre_ping=True)
+    # Create a session factory
+    Session = sessionmaker(bind=engine)
+    # Create a session object
+    session = Session()
+    # Retrieve cities and their associated states from the database
+    # by joining the City and State tables based on the state_id
+    # and ordering the results by city ID
+    for city, state in session.query(City, State) \
+                              .filter(City.state_id == State.id) \
+                              .order_by(City.id):
+        # Print the city and state information
+        print("{}: ({}) {}".format(state.name, city.id, city.name))

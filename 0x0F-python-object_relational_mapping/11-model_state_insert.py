@@ -1,42 +1,27 @@
 #!/usr/bin/python3
-"""
-adds a state to the database
-"""
-
-
-from model_state import Base, State
+"""Module that adds a new state to a MySQL database using SQLAlchemy."""
+import sys
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import sys
-
+from model_state import State
 
 if __name__ == "__main__":
-    if len(sys.argv) == 4:
-        try:
-            engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
-                                   .format(sys.argv[1], sys.argv[2],
-                                           sys.argv[3]), pool_pre_ping=True)
-            Base.metadata.create_all(engine)
+    # Create the SQLAlchemy engine using the provided MySQL credentials
+    engine = create_engine("mysql+mysqldb://{}:{}@localhost/{}"
+                           .format(sys.argv[1], sys.argv[2], sys.argv[3]),
+                           pool_pre_ping=True)
 
-            Session = sessionmaker(bind=engine)
+    # Create a session factory
+    Session = sessionmaker(bind=engine)
 
-            session = Session()
+    # Create a session object
+    session = Session()
 
-            louisiana = State("Louisiana")
-
-            session.add(louisiana)
-
-            session.commit()
-
-            louisiana_id = session.query(State.id) \
-                                  .filter(State.name == "Louisiana") \
-                                  .all()
-
-            if louisiana_id:
-                print("{}".format(louisiana_id[0][0]))
-
-        except:
-            print("something wrong with the query")
-
-        finally:
-            session.close()
+    # Create a new State object for Louisiana
+    louisiana = State(name="Louisiana")
+    # Add the new state to the session
+    session.add(louisiana)
+    # Commit the session to persist the changes
+    session.commit()
+    # Print the ID of the newly added state
+    print(louisiana.id

@@ -1,38 +1,23 @@
 #!/usr/bin/python3
-"""
-list all matched states
-"""
-import MySQLdb
+"""Module that lists all states from the hbtn_0e_0_usa database."""
 import sys
+import MySQLdb
 
 if __name__ == "__main__":
-    if len(sys.argv) == 5:
-        try:
-            host = 'localhost'
-            port = 3306
-            usr = sys.argv[1]
-            passwd = sys.argv[2]
-            db = sys.argv[3]
-            state = sys.argv[4]
+    import MySQLdb
+    import sys
 
-            sq = "SELECT * FROM states WHERE name=%s ORDER BY id ASC"
+    # Get the command-line arguments
+    mysql_username = sys.argv[1]
+    mysql_password = sys.argv[2]
+    database_name = sys.argv[3]
+    state_name = sys.argv[4]
 
-            con = MySQLdb.connect(host=host, port=port, user=usr,
-                                  passwd=passwd, db=db)
-
-            cur = con.cursor()
-
-            cur.execute(sq, (state,))
-
-            staterecords = cur.fetchall()
-
-            for st in staterecords:
-                print("{}".format(st))
-
-        except:
-            print("something wrong with the sql query")
-
-        finally:
-
-            cur.close()
-            con.close()
+    # Connect to the MySQL server
+    db = MySQLdb.connect(
+        host='localhost',
+        port=3306,
+        user=mysql_username,
+        passwd=mysql_password,
+        db=database_name
+    )
