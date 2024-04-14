@@ -23,7 +23,7 @@ if __name__ == "__main__":
     # Create a session object
     session = Session()
 
-    # Query all states and their cities, sorted by states.id and cities.id
+    # Query all states and their associated cities, sorted by state id and city id
     states = session.query(State).order_by(State.id).all()
 
     # Print the results
