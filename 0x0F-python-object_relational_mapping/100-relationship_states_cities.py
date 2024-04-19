@@ -1,40 +1,45 @@
 #!/usr/bin/python3
-"""Script that creates the State “California” with the City “San Francisco”
-   from the database hbtn_0e_100_usa"""
+"""
+Creates the State "California" with the City "San Francisco" from the database hbtn_0e_100_usa
+"""
 
-import sys
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from relationship_state import Base, State
 from relationship_city import City
+import sys
 
 if __name__ == "__main__":
-    # Create the SQLAlchemy engine using the provided MySQL credentials
-    engine = create_engine("mysql+mysqldb://{}:{}@localhost/{}"
-                           .format(sys.argv[1], sys.argv[2], sys.argv[3]),
-                           pool_pre_ping=True)
+    # Check if correct number of arguments is provided
+    if len(sys.argv) != 4:
+        print("Usage: {} <mysql username> <mysql password> <database name>".format(sys.argv[0]))
+        sys.exit(1)
 
-    # Create all tables in the engine
+    # Create connection to MySQL database
+    username, password, db_name = sys.argv[1], sys.argv[2], sys.argv[3]
+    engine = create_engine("mysql+mysqldb://{}:{}@localhost:3306/{}".format(username, password, db_name))
+
+    # Create tables
     Base.metadata.create_all(engine)
 
-    # Create a session factory
+    # Create session
     Session = sessionmaker(bind=engine)
-
-    # Create a session object
     session = Session()
 
-    # Create California state
+    # Create a new State object for California
     california = State(name="California")
-    # Create San Francisco city
-    san_francisco = City(name="San Francisco", state=california)
-    # Add the city to the state's cities
+
+    # Create a new City object for San Francisco
+    san_francisco = City(name="San Francisco")
+
+    # Add the City object to the State object's cities relationship
     california.cities.append(san_francisco)
 
-    # Add the state to the session
+    # Add the State object to the session
     session.add(california)
 
-    # Commit the session to persist the changes
+    # Commit the changes to the database
     session.commit()
 
-    # Close the session
+    # Close session
     session.close()
