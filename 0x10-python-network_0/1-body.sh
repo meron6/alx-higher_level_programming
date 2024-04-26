@@ -1,7 +1,3 @@
 #!/bin/bash
-
-# Get the URL from the command line argument
-url="$1"
-
-# Send a GET request to the URL and display the body of the response
-curl -sL -w "%{http_code}" "$url" | grep -q "200" && curl -sL "$url"
+# send a GET request to an URL with curl, and display the body of the response
+curl -sL "$1"
