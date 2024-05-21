@@ -8,6 +8,6 @@ fs.writeFile(file, content, { encoding: 'utf-8', flag: 'a' }, err => {
   if (err) {
     console.log(err);
   } else {
-    console.log(`Content successfully appended to ${file}`);
+
   }
 });
