@@ -1,12 +1,17 @@
 #!/usr/bin/node
-const request = require('request');
-request(process.argv[2], function (error, response, body) {
-	if (!error) {
-		const results = JSON.parse(body).results;
-		console.log(results.reduce((count, movie) => {
-			return movie.characters.find((character) => character.endsWith('/18/'))
-			? count + 1
-			: count;
-		}, 0));
-	}
+const r = require('request');
+const url = process.argv[2];
+r(url, function (error, status, body) {
+  if (error) {
+    console.error(error);
+  } else {
+    const jsonbody = JSON.parse(body);
+    console.log(parseInt(jsonbody.results.map(function (film, index) {
+      return film.characters.filter(function (character, index) {
+        return character === 'https://swapi.co/api/people/18/';
+      });
+    }).filter(function (movie) {
+      return movie.length > 0;
+    }).length));
+  }
 });

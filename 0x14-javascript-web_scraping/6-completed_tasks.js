@@ -1,18 +1,28 @@
 #!/usr/bin/node
-const request = require('request');
+const r = require('request');
+const url = process.argv[2];
+r(url, function (error, response, body) {
+  if (error) {
+    console.error(error);
+  } else {
+    const todos = JSON.parse(body);
+    const uniqueIds = new Set();
+    const myObj = {};
 
-request(process.argv[2], function (err, response, body) {
-  if (err == null) {
-    const resp = {};
-    const json = JSON.parse(body);
-    for (let i = 0; i < json.length; i++) {
-      if (json[i].completed === true) {
-        if (resp[json[i].userId] === undefined) {
-          resp[json[i].userId] = 0;
+    for (const todo of todos) {
+      uniqueIds.add(todo.userId);
+    }
+
+    for (const id of uniqueIds) {
+      let counter = 0;
+      myObj[id] = counter;
+      for (const todo of todos) {
+        if (todo.userId === id && todo.completed) {
+          counter++;
+          myObj[id] = counter;
         }
-        resp[json[i].userId]++;
       }
     }
-    console.log(resp);
+    console.log(myObj);
   }
 });

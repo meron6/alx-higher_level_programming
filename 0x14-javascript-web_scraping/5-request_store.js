@@ -1,4 +1,15 @@
 #!/usr/bin/node
-const request = require('request');
+const r = require('request');
 const fs = require('fs');
-request(process.argv[2]).pipe(fs.createWriteStream(process.argv[3]));
+const url = process.argv[2];
+const file = process.argv[3];
+r
+  .get(url, 'utf-8')
+  .on('error', function (error) {
+    console.log(error);
+  })
+  .on('response', function (response) {
+  })
+  .on('data', function (data) {
+  })
+  .pipe(fs.createWriteStream(file));
